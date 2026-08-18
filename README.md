@@ -29,6 +29,9 @@ TENNIS_WEEKDAY=2            # 0=lundi … 2=mercredi
 TENNIS_OPEN_AT=08:00:00     # heure de Paris
 TENNIS_DEADLINE_MINUTES=6
 
+# Invitations calendrier (make_invite.py) — surchargeable, séparé par virgules
+TENNIS_INVITEES=jenny@getgranit.ai,mehdi.kellal@gmail.com
+
 # Modes de test
 DRY_RUN=0                   # 1 = s'arrêter avant la validation finale
 SKIP_WAIT=0                 # 1 = ne pas attendre 08:00 (calage)

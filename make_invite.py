@@ -6,6 +6,7 @@
 """
 
 import json
+import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -13,6 +14,15 @@ from urllib.parse import quote
 from zoneinfo import ZoneInfo
 
 OUT_DIR = Path(__file__).resolve().parent / "out"
+
+# Invités par défaut des événements/invitations (surchargeable par env,
+# adresses séparées par des virgules).
+DEFAULT_INVITEES = "jenny@getgranit.ai,mehdi.kellal@gmail.com"
+
+
+def get_invitees():
+    raw = os.environ.get("TENNIS_INVITEES") or DEFAULT_INVITEES
+    return [addr.strip() for addr in raw.split(",") if addr.strip()]
 
 
 def main():
@@ -40,18 +50,21 @@ def main():
         f"Partenaire : {partner}"
     )
 
+    invitees = get_invitees()
+    organizer = invitees[0] if invitees else "jenny@getgranit.ai"
+
     utc = ZoneInfo("UTC")
     fmt = "%Y%m%dT%H%M%SZ"
     start_utc = start.astimezone(utc).strftime(fmt)
     end_utc = end.astimezone(utc).strftime(fmt)
     stamp = datetime.now(utc).strftime(fmt)
 
-    ics = "\r\n".join([
+    ics_lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
         "PRODID:-//tennis-booking//book_tennis//FR",
         "CALSCALE:GREGORIAN",
-        "METHOD:PUBLISH",
+        "METHOD:REQUEST",
         "BEGIN:VEVENT",
         f"UID:tennis-{result['target_date']}-court{court}@tennis-booking",
         f"DTSTAMP:{stamp}",
@@ -60,11 +73,15 @@ def main():
         f"SUMMARY:{title}",
         f"LOCATION:{location}",
         "DESCRIPTION:" + description.replace("\n", "\\n"),
-        "END:VEVENT",
-        "END:VCALENDAR",
-        "",
-    ])
-    (OUT_DIR / "invitation.ics").write_text(ics, encoding="utf-8")
+        f"ORGANIZER;CN={organizer}:mailto:{organizer}",
+    ]
+    for addr in invitees:
+        ics_lines.append(
+            "ATTENDEE;ROLE=REQ-PARTICIPANT;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:"
+            f"mailto:{addr}"
+        )
+    ics_lines += ["END:VEVENT", "END:VCALENDAR", ""]
+    (OUT_DIR / "invitation.ics").write_text("\r\n".join(ics_lines), encoding="utf-8")
 
     gcal_link = (
         "https://calendar.google.com/calendar/render?action=TEMPLATE"
@@ -73,6 +90,8 @@ def main():
         f"&location={quote(location)}"
         f"&details={quote(description)}"
     )
+    if invitees:
+        gcal_link += f"&add={quote(','.join(invitees))}"
     (OUT_DIR / "gcal_link.txt").write_text(gcal_link + "\n", encoding="utf-8")
 
     date_fr = start.strftime("%d/%m/%Y")
@@ -86,6 +105,7 @@ def main():
         f"  • Lieu : {location}\n"
         f"  • Court : n°{court}\n"
         f"  • Partenaire : {partner}\n"
+        f"  • Invités : {', '.join(invitees)}\n"
         f"\n"
         f"Ajouter au calendrier Google :\n{gcal_link}\n"
         f"\n"

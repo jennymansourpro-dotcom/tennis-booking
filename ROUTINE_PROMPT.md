@@ -17,7 +17,10 @@ contexte et les interdits. Exécute exactement ceci :
 3. **Si `status` = `booked`** :
    - Lance `python make_invite.py`.
    - Crée l'événement dans le calendrier via le **connecteur Google Calendar**
-     (titre, lieu, début/fin repris de `result.json` / `out/invitation.ics`).
+     (titre, lieu, début/fin repris de `result.json` / `out/invitation.ics`) et
+     **invite** `jenny@getgranit.ai` et `mehdi.kellal@gmail.com` (les invités
+     figurent aussi comme `ATTENDEE` dans `out/invitation.ics` et dans le
+     paramètre `add=` du lien `out/gcal_link.txt`).
    - Envoie un mail via le **connecteur Gmail** à **jennymansour96@gmail.com**
      avec pour corps le contenu de `out/email_body.txt`, et joins
      `out/invitation.ics` si l'envoi de pièce jointe est possible.
