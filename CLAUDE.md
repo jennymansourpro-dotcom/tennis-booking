@@ -48,9 +48,7 @@ réservation doit alors être faite à la main.
    refuse déjà ; ne pas contourner cette vérification.
 3. **Ne jamais exposer le mot de passe** (`PARIS_TENNIS_PASSWORD`) — ni dans les
    logs, ni dans un mail, ni dans un commit, ni dans une capture commentée.
-3bis. **Ne jamais contourner le captcha anti-robot** (résolution automatique,
-   OCR, service tiers, rejeu de session…). Échec propre + mail, rien d'autre.
-4. **Ne jamais committer** `out/`, `.env`, ni aucun fichier contenant des
+3. **Ne jamais committer** `out/`, `.env`, ni aucun fichier contenant des
    identifiants. Le repo est en lecture pendant la routine : ne pas committer
    ni pousser depuis la routine.
 
