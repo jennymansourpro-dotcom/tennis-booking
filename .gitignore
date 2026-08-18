@@ -1,4 +1,4 @@
-out/
-.env
-__pycache__/
-*.pyc
+node_modules/
+config.json
+img/
+*.ics

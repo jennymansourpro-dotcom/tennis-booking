@@ -1,91 +1,155 @@
-# tennis-booking — routine de réservation Paris Tennis
+# par-ici-tennis (*Parisii tennis*)
 
-Réserve automatiquement chaque semaine le créneau **mercredi 19h, court 2, Tennis
-Edouard Pailleron (Paris 19e)** sur tennis.paris.fr, puis envoie l'invitation par
-mail et l'ajoute au calendrier.
+Script to automatically book a tennis court in Paris (on https://tennis.paris.fr)
 
-## 1. Environnement cloud
+> "Par ici" mean "this way" in french. The "Parisii" were a Gallic tribe that dwelt on the banks of the river Seine. They lived on lands now occupied by the modern city of Paris. The project name can be interpreted as "For a Parisian tennis, follow this way"
 
-Créer (ou réutiliser) un environnement Claude Code sur le web avec **accès réseau
-« Complet »** (le script doit joindre `tennis.paris.fr` et `v70-auth.paris.fr`).
+**NOTE**: They added a CAPTCHA during the reservation process. The latest version **should** pass through. If it fails, open an issue with error logs, I will try to find another way.
 
-## 2. Variables d'environnement
+## Table of Contents
 
-Configurer dans l'environnement (ou un fichier `.env` local, jamais committé) :
+- [Prerequisites](#prerequisites)
+- [Get started](#get-started)
+  - [Configuration](#configuration)
+  - [Ntfy notifications (optional)](#ntfy-notifications-optional)
+  - [Payment process](#payment-process)
+  - [Running](#running)
+    - [On your machine](#on-your-machine)
+    - [Using GitHub Actions (beta)](#using-github-actions-beta)
+- [Contributing](#contributing)
+- [License](#license)
 
-```bash
-# Identifiants Mon Paris (obligatoires)
-PARIS_TENNIS_EMAIL=...
-PARIS_TENNIS_PASSWORD=...
+## Prerequisites
+- Node.js >= 20.6.x
+- A "carnet de réservation" in your Paris Tennis account (see [Payment process](#payment-process))
 
-# Cible (valeurs par défaut indiquées)
-TENNIS_PARTNER_FIRSTNAME=Mehdi
-TENNIS_PARTNER_LASTNAME=Kellal
-TENNIS_SITE_NAME=Edouard Pailleron
-TENNIS_ARRONDISSEMENT=19
-TENNIS_COURT=2
-TENNIS_START_HOUR=19
-TENNIS_WEEKDAY=2            # 0=lundi … 2=mercredi
-TENNIS_OPEN_AT=08:00:00     # heure de Paris
-TENNIS_DEADLINE_MINUTES=6
+## Get started
 
-# Invitations calendrier (make_invite.py) — surchargeable, séparé par virgules
-TENNIS_INVITEES=jenny@getgranit.ai,mehdi.kellal@gmail.com
+### Configuration
 
-# Modes de test
-DRY_RUN=0                   # 1 = s'arrêter avant la validation finale
-SKIP_WAIT=0                 # 1 = ne pas attendre 08:00 (calage)
+Create `config.json` file from `config.json.sample` and complete with your preferences.
+
+- `location`: a list of courts ordered by preference - [full list](https://tennis.paris.fr/tennis/jsp/site/Portal.jsp?page=tennisParisien&view=les_tennis_parisiens)
+
+You can use two formats for the `locations` field:
+
+1) **Array format:**
+  ```json
+  "locations": [
+    "Valeyre",
+    "Suzanne Lenglen",
+    "Poliveau"
+  ]
+  ```
+  Use this if you want to search all courts at each location, in order of preference.
+
+2) **Object format (with court numbers):**
+  ```json
+  "locations": {
+    "Suzanne Lenglen": [5, 7, 11],
+    "Henry de Montherlant": []
+  }
+  ```
+  Use this if you want to specify court numbers for each location. An empty array means all courts at that location will be considered.
+
+Choose the format that best matches your preferences.
+
+- `date` (optional) a string representing a date formatted D/M/YYYY, do not set the date to automatically book 6 days in the future as soon as the reservation slots open
+
+- `hours` a list of hours ordered by preference
+
+- `priceType` an array containing price types you can book `Tarif plein` and/or `Tarif réduit`
+
+- `courtType` an array containing court types you can book `Découvert` and/or `Couvert`
+
+- `players` list of players 3 max (without you)
+
+### Ntfy notifications (optional)
+
+You can configure the script to send notifications with the reservation details and the ics file via [ntfy](https://ntfy.sh), a simple pub-sub notification service.
+
+To receive notifications:
+- Choose a unique topic name (e.g., `YOUR-UNIQUE-TOPIC-NAME` — choose something unique and hard to guess, as there is no password protection for subscriptions)
+- Subscribe to your topic using the [ntfy mobile app](https://ntfy.sh/docs/subscribe/phone/) or [web interface](https://ntfy.sh/)
+
+To enable ntfy notifications in script, add the following configuration to your `config.json`:
+
+```json
+"ntfy": {
+  "enable": true,
+  "topic": "YOUR-UNIQUE-TOPIC-NAME"
+}
 ```
 
-## 3. Installation
+Configuration options:
+- `enable`: set to `true` to enable ntfy notifications
+- `topic`: your unique ntfy topic name chosen previously
+- `domain` (optional): custom ntfy server domain (`ntfy.sh` used if empty)
 
-```bash
-bash setup.sh
+Notification example:
+
+![Notification example](doc/ntfy.png)
+
+### Payment process
+
+To pass the payment phase without trouble you need a "carnet de réservation", be careful you need a "carnet" that matches your `priceType` & `courtType` [combination](https://tennis.paris.fr/tennis/jsp/site/Portal.jsp?page=rate&view=les_tarifs) selected previously
+
+### Running
+
+#### <ins>On your machine</ins>
+
+To run this project locally, install the dependencies
+
+```sh
+npm install
 ```
 
-(installe `playwright` + `python-dotenv`, puis Chromium via
-`python -m playwright install --with-deps chromium`.)
+and run the script:
 
-## 4. Création de la routine
-
-1. Connecter les **connecteurs Gmail et Google Calendar** au compte Claude.
-2. Créer une routine planifiée qui exécute le contenu de `ROUTINE_PROMPT.md`
-   dans cet environnement.
-3. Planification : **jeudi 07:52 heure de Paris**, soit en cron UTC :
-   - heure d'été (CEST, UTC+2) : `52 5 * * 4`
-   - heure d'hiver (CET, UTC+1) : `52 6 * * 4`
-   (ajuster au changement d'heure, ou utiliser un planificateur qui accepte
-   directement le fuseau Europe/Paris.)
-
-Le script attend lui-même 08:00:00.000 précises — le cron à 07:52 sert juste à
-démarrer la session, se connecter et se positionner sur le planning.
-
-## 5. Test à blanc
-
-Avant d'armer la routine :
-
-```bash
-DRY_RUN=1 SKIP_WAIT=1 python book_tennis.py
-cat out/result.json
+```sh
+npm start
 ```
 
-Attendu : `status: "dry_run"` et les captures `01_landing` → `10_partner_filled`
-dans `out/`. Rien n'est réservé en dry-run. Ensuite, éventuellement tester
-`python make_invite.py` (fonctionne aussi sur un `result.json` en `dry_run`).
+To test your configuration, you can run this project in dry-run mode. It will check court availability but no reservations will be made:
 
-## Limite connue : captcha anti-robot
+```sh
+npm run start-dry
+```
 
-tennis.paris.fr affiche une **vérification de sécurité (captcha image)** juste
-après le clic « Réserver », précisément pour bloquer les réservations
-automatisées (constaté au calage : « nous bloquons les robots… », avec mention
-« Blacklisté »). Dans ce cas le script s'arrête proprement
-(`status=error`, raison `CaptchaRequired`, capture dans `out/`) et la routine
-envoie le mail d'échec. Le contournement automatique du captcha est
-volontairement exclu ; si le captcha est actif le jour J, la réservation doit
-être faite à la main.
+You can start the script automatically using cron or equivalent
 
-## Garde-fous
+#### <ins>Using GitHub Actions (beta)</ins>
 
-- Jamais d'autre créneau que la cible ; jamais de validation si un montant non
-  nul en euros est affiché ; le mot de passe n'apparaît jamais dans les logs.
-- `out/` (captures, dumps, résultats) et `.env` ne sont jamais committés.
+> [!IMPORTANT]
+> Due to GitHub Actions limitations during high load on their servers, scheduled triggers may not run exactly at 08:00. Improvements are in progress to make the booking more reliable even with a slight delay.
+>
+> For perfect timing, consider using your [own server or computer](#On-your-machine).
+
+You can automate the booking using GitHub Actions workflows. The repository includes pre-configured workflows:
+
+1. **[Fork this repository](https://github.com/bertrandda/par-ici-tennis/fork)** to your own GitHub account (if you find this repository useful, you can also give it a star ⭐)
+
+2. **Configure GitHub secrets and variables:**
+   - Go to your repository Settings → Secrets and variables → Actions
+   - Add the following **secrets**:
+     - `ACCOUNT_EMAIL`: your Paris Tennis email
+     - `ACCOUNT_PASSWORD`: your Paris Tennis password
+     - `NTFY_TOPIC`: (optional) your ntfy topic for notifications
+     - `NTFY_DOMAIN`: (optional) custom ntfy server domain if you don't use `ntfy.sh`
+   - Add a **variable**:
+     - `CONFIG_JSON`: the content of your `config.json` file (⚠️ without account credentials and ntfy config for security reasons). Without date line to always book 6 days in advance
+
+3. **Enable workflow:**
+   - The day before you want to execute the script, go to the Actions tab and enable the `Tennis booking` workflow
+   - The workflow runs the following day at 08:00 Paris time and automatically disables itself after running to avoid restarting on subsequent days
+   - Manually re-enable it from the Actions tab when you need to book again
+
+To test Github Actions config you can start `Tennis booking dry-run` workflow manually. It will check court availability but no reservations will be made.
+
+## Contributing
+
+Contributions and bug reports are welcome! Please open an [issue](https://github.com/bertrandda/par-ici-tennis/issues) or submit a [pull request](https://github.com/bertrandda/par-ici-tennis/pulls).
+
+## License
+
+MIT
