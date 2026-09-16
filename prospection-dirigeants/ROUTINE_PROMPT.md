@@ -30,8 +30,10 @@ Pour chaque cible dont le champ `nom` est vide, lance une recherche FullEnrich
 localisation France, `max_per_company` 2). Renseigne `nom`, `fonction`,
 `linkedin`, `accroche` et passe `statut` à « Identifié (FullEnrich, <date> ) ».
 
-**N'enrichis jamais email ni téléphone sans demande explicite de Jenny** :
-la recherche ne consomme pas de crédits, l'enrichissement si.
+**N'enrichis jamais email ni téléphone.** Jenny a tranché : recherche seule.
+La recherche ne consomme pas de crédits, l'enrichissement si. Si un besoin
+d'enrichissement apparaît, signale-le dans le mail hebdomadaire et attends une
+consigne explicite — ne lance rien de toi-même.
 
 Écarte les homonymies : vérifie que le nom d'entreprise renvoyé correspond
 bien à la cible (le moteur remonte des sociétés au nom voisin).

@@ -1,0 +1,54 @@
+{
+  "_commentaire": [
+    "Offres repérées hors ATS des cibles (Welcome to the Jungle, LinkedIn, Indeed, sites carrières).",
+    "Ces sites n'exposent pas d'API : la routine les trouve par moteur de recherche puis VÉRIFIE",
+    "chaque page avant de la retenir. Les pages indexées survivent longtemps à la clôture du poste :",
+    "au relevé du 16/09/2026, 3 des 4 offres vérifiées étaient déjà fermées.",
+    "statut : 'ouverte' (vérifiée), 'fermee' (vérifiée close), 'a_verifier' (non vérifiée)."
+  ],
+  "releve": "2026-09-16",
+  "offres": [
+    {
+      "entreprise": "Theodo GovTech", "titre": "Directeur de programme Secteur Public",
+      "lieu": "Paris", "url": "https://jobs.lever.co/theodo/bef33bb2-9635-496a-8c6c-44d408409d88",
+      "publiee": "2026-09-02", "statut": "ouverte", "famille": "Transformation", "score_cible": 12,
+      "texte": "Theodo GovTech accompagne ministères, collectivités territoriales et grands opérateurs publics. Accords-cadres stratégiques ANTS, Ministère de l'Intérieur, Ministère de l'Éducation nationale, ouverture vers l'ANS. Pilotage delivery et gouvernance de programme, gestion contractuelle et relation client, pilotage des risques, pilotage financier, staffing et management. 10 à 15 ans d'expérience, expérience dans le secteur public requise. CDI Paris, expérience > 10 ans."
+    },
+    {
+      "entreprise": "Atexo", "titre": "Business Developer - Secteur public",
+      "lieu": "Paris", "url": "https://www.welcometothejungle.com/fr/companies/atexo/jobs/business-developer-secteur-public_paris_ATEXO_13zeaNd",
+      "publiee": "", "statut": "a_verifier", "famille": "Transformation", "score_cible": 11,
+      "texte": "Éditeur de logiciels de la commande publique. Détecter des opportunités commerciales auprès des grands décideurs publics, accompagner la transformation numérique des entités publiques, rédiger des réponses à appel d'offres. Clients : France Télévisions, CNRS, CNES, entités publiques de l'État, Métropole du Grand Paris, 12 régions, 50 villes et métropoles, 40 départements. Commande publique : plus de 200 milliards d'euros."
+    },
+    {
+      "entreprise": "AXA", "titre": "Analyste Affaires Publiques",
+      "lieu": "Puteaux", "url": "https://www.welcometothejungle.com/fr/companies/axa/jobs/analyste-affaires-publiques-h-f-cdi-paris_puteaux",
+      "publiee": "", "statut": "a_verifier", "famille": "Transformation", "score_cible": 9,
+      "texte": "Rattaché à la responsable des affaires publiques. Suivre les développements des politiques publiques européennes et internationales, construire les positions AXA, faciliter le contact entre le management et les législateurs et décideurs politiques, diffuser les positions auprès des cercles réglementaires et des organisations professionnelles."
+    },
+    {
+      "entreprise": "Livi (Kry France)", "titre": "Directeur des Affaires Publiques",
+      "lieu": "Paris", "url": "https://www.welcometothejungle.com/fr/companies/livi/jobs/head-of-public-affairs_paris",
+      "publiee": "2022-09-16", "statut": "fermee", "famille": "Santé", "score_cible": 13,
+      "texte": "Head of Public Affairs Livi France. Page indexée mais offre publiée il y a 4 ans et marquée comme n'étant plus disponible."
+    },
+    {
+      "entreprise": "France Digitale", "titre": "Directeur des Affaires Publiques",
+      "lieu": "Paris", "url": "https://www.welcometothejungle.com/fr/companies/france-digitale/jobs/directeur-des-affaires-publiques-h-f-cdi_paris",
+      "publiee": "2026-04-16", "statut": "fermee", "famille": "IA", "score_cible": 13,
+      "texte": "Stratégie d'influence auprès du gouvernement, du Parlement et de la Commission européenne sur le numérique, l'IA et le financement du risque. Management de 4 collaborateurs à Paris et Bruxelles. Offre marquée comme n'étant plus disponible au 16/09/2026."
+    },
+    {
+      "entreprise": "Numeum", "titre": "Délégué(e) Affaires Publiques",
+      "lieu": "Paris", "url": "https://www.welcometothejungle.com/fr/companies/numeum/jobs/delegue-affaires-publiques_paris",
+      "publiee": "2025-09-16", "statut": "fermee", "famille": "IA", "score_cible": 11,
+      "texte": "Syndicat patronal du numérique. Suivi réglementaire national, relations institutionnelles avec les cabinets ministériels et les parlementaires. Offre marquée comme n'étant plus disponible au 16/09/2026."
+    },
+    {
+      "entreprise": "Toucan Toco (ChapsVision)", "titre": "Business Developer secteur Public",
+      "lieu": "Paris", "url": "https://www.welcometothejungle.com/fr/companies/toucan-toco/jobs/business-developer-public-sector-key-account-manager-public-sector_paris",
+      "publiee": "", "statut": "a_verifier", "famille": "IA", "score_cible": 12,
+      "texte": "Stratégie land and expand auprès des principales administrations françaises. Clients cités : Pôle Emploi, Caisse des Dépôts, plusieurs ministères, la DITP. Attention : l'offre cite Pôle Emploi, renommé France Travail en 2024, et Toucan Toco a depuis été absorbée par ChapsVision : annonce probablement périmée."
+    }
+  ]
+}

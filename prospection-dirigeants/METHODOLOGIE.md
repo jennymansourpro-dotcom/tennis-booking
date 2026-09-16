@@ -64,3 +64,37 @@ C'est cohérent avec la v1, où 7 des 8 cibles santé étaient en priorité haut
   être confirmés sont signalés dans la colonne *Points à vérifier*.
 - 15 dirigeants restent à identifier : ils sont listés en fin de
   `out/a_contacter.md`.
+
+---
+
+# Notation des offres (routine 2)
+
+Même forme que la notation des cibles : six critères de 0 à 3, total sur 18.
+
+| Critère | 0 | 3 |
+|---|---|---|
+| **Intitulé** | Sans rapport | Affaires publiques, relations institutionnelles, secteur public, partenariats publics |
+| **Séniorité** | Stage, alternance, junior | Directeur, head of, chief, VP |
+| **Mission publique** | Aucune mention de la sphère publique | La fiche de poste est saturée d'enjeux publics (ministères, régulateurs, collectivités, remboursement) |
+| **Ancrage** | Poste hors de France | Poste en France, sans rattachement étranger |
+| **Entreprise** | Hors liste de cibles | Cible en priorité haute |
+| **Fraîcheur** | Publiée il y a plus de six mois | Publiée il y a moins d'un mois |
+
+**Filtre appliqué avant le classement** : une offre n'est retenue que si son
+**intitulé** vaut au moins 2 et sa **mission publique** au moins 1. Sans ce
+filtre, tous les postes juridiques d'un assureur santé remontent en tête : leurs
+fiches citent l'Assurance maladie et les régulateurs à chaque paragraphe sans
+qu'il s'agisse pour autant de postes d'affaires publiques.
+
+## Ce que le premier relevé apprend (16/09/2026)
+
+- **704 offres analysées, 8 retenues.** Chez les 104 cibles, une seule offre
+  porte explicitement les affaires publiques dans son intitulé (Doctolib).
+- **La couverture ATS est de 18 entreprises sur 104.** Les autres utilisent un
+  outil sans API publique ou une page carrière maison. Elle progresse en
+  complétant `SLUGS_CONNUS` dans `scan_offres.py`.
+- **Trois offres vérifiées sur quatre étaient déjà fermées** côté sites
+  d'emploi. Les pages restent indexées bien après la clôture : toute offre
+  trouvée par moteur de recherche doit être vérifiée page à page.
+- **Ce constat valide la routine 1** : dans cet écosystème, le poste que vise
+  Mehdi est plus souvent à créer qu'à pourvoir.
